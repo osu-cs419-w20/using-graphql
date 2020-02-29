@@ -4,10 +4,15 @@ import fetch from 'isomorphic-unfetch';
 import UserHeader from '../components/UserHeader';
 import ReposList from '../components/ReposList';
 
+/*
+ * Caution!!!  This is not a safe way to incorporate an authentication token
+ * into your app.  The token will be readable by anyone who runs the code.
+ * We're doing it this way for ease of demonstration only.
+ */
+const token = process.env.REACT_APP_NOT_SECRET_GITHUB_TOKEN;
+
 function UserIssues() {
   const login = 'octocat';
-  const [ tokenInput, setTokenInput ] = useState(null);
-  const [ token, setToken ] = useState(null);
   const [ user, setUser ] = useState({});
   const [ repos, setRepos ] = useState([]);
 
@@ -40,7 +45,7 @@ function UserIssues() {
     if (token) {
       fetchData();
     }
-  }, [ login, token ]);
+  }, [ login ]);
 
   return (
     <>
@@ -50,18 +55,9 @@ function UserIssues() {
           {repos.length ? <ReposList repos={repos} /> : <p>Loading repos...</p>}
         </div>
       ) : (
-        <form onSubmit={() => setToken(tokenInput)}>
-          <h2>
-            Enter a <a href="https://help.github.com/articles/creating-an-access-token-for-command-line-use/">GitHub OAuth Token</a>
-          </h2>
-          <input
-            type="password"
-            placeholder="GitHub OAuth Token"
-            value={tokenInput}
-            onChange={e => setTokenInput(e.target.value)}
-          />
-          <button>Submit</button>
-        </form>
+        <p>
+          Rerun with a valid <a href="https://help.github.com/articles/creating-an-access-token-for-command-line-use/">GitHub OAuth Token</a> set in the environment variable <code>REACT_APP_NOT_SECRET_GITHUB_TOKEN</code>
+        </p>
       )}
     </>
   );
