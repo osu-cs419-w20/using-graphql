@@ -48,18 +48,18 @@ function UserIssues() {
   }, [ login ]);
 
   return (
-    <>
+    <div>
       {token ? (
-        <div>
+        <>
           {user.name ? <UserHeader login={login} user={user} /> : <p>Loading user...</p>}
           {repos.length ? <ReposList repos={repos} /> : <p>Loading repos...</p>}
-        </div>
+        </>
       ) : (
         <p>
           Rerun with a valid <a href="https://help.github.com/articles/creating-an-access-token-for-command-line-use/">GitHub OAuth Token</a> set in the environment variable <code>REACT_APP_NOT_SECRET_GITHUB_TOKEN</code>
         </p>
       )}
-    </>
+    </div>
   );
 }
 
