@@ -1,15 +1,41 @@
 import React, { useState } from 'react';
+import { gql } from 'apollo-boost';
+import { useMutation } from '@apollo/react-hooks';
+
+const CHANGE_USER_STATUS = gql`
+mutation ChangeUserStatus($emoji: String!, $message: String!) {
+  changeUserStatus(input: {
+    clientMutationId: "cs419Lecture",
+    emoji: $emoji,
+    message: $message
+  }) {
+    status {
+      updatedAt
+    }
+  }
+}
+`;
 
 function ChangeUserStatus() {
   const haveToken = !!process.env.REACT_APP_NOT_SECRET_GITHUB_TOKEN;
   const [ emoji, setEmoji ] = useState("");
   const [ message, setMessage ] = useState("");
+  const [ changeUserStatus, { data } ] = useMutation(CHANGE_USER_STATUS);
+
+  // changeUserStatus({ variables: {
+  //   emoji: emoji,
+  //   message: message
+  // }});
 
   return (
     <div>
       {haveToken ? (
         <form onSubmit={(e) => {
           e.preventDefault();
+          // changeUserStatus({ variables: {
+          //   emoji: emoji,
+          //   message: message
+          // }});
           setEmoji("");
           setMessage("");
         }}>
@@ -32,6 +58,7 @@ function ChangeUserStatus() {
           <div>
             <button>Submit</button>
           </div>
+          {data && data.changeUserStatus.status && <p>Updated at: {data.changeUserStatus.status.updatedAt}</p>}
         </form>
       ) : (
         <p>
